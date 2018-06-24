@@ -1,0 +1,45 @@
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+            <property name="caseSensitive" value="true"/>
+        </plugin>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/user_manage"
+                        userId="root"
+                        password="">
+        </jdbcConnection>
+
+        <!--生成的实体类所在的包路径-->
+        <javaModelGenerator targetPackage="com.my.springboot.springboot1.model"
+                            targetProject="src/main/java"/>
+
+        <!--生成的sql mapper xml 所在路径-->
+        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="src/main/resources"/>
+
+        <!--生成的mapper(dao)所在的包路径-->
+        <!--<javaClientGenerator targetPackage="com.my.springboot.springboot1.mapper"-->
+                             <!--targetProject="src/main/java"-->
+                             <!--type="XMLMAPPER"/>-->
+
+        <!--生成的表名对应的实体类名字 不指定实体类名字，则根据根据表名自动转换-->
+        <table tableName="user" domainObjectName="User"
+               enableInsert="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="id" sqlStatement="MYSQL" identity="true" />
+        </table>
+    </context>
+</generatorConfiguration>
