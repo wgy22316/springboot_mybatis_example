@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 @Data
 public class SaveUserVo {
 
+    private Integer id;
+
     /**
      * 用户名
      */

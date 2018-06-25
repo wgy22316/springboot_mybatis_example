@@ -14,4 +14,8 @@ public interface UserService {
     User selectUserById(Integer id);
 
     Integer addUser(SaveUserVo saveUserVo);
+
+    Integer updateUser(SaveUserVo saveUserVo);
+
+    boolean delUserById(Integer id);
 }

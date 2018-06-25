@@ -1,5 +1,7 @@
 package com.my.springboot.springboot1.service.impl;
 
+import com.my.springboot.springboot1.enums.UserEnum;
+import com.my.springboot.springboot1.exception.BusinessException;
 import com.my.springboot.springboot1.mapper.UserMapper;
 import com.my.springboot.springboot1.model.User;
 import com.my.springboot.springboot1.service.UserService;
@@ -37,5 +39,32 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(saveUserVo,user);
         Integer result = userMapper.insertSelective(user);
         return user.getId();
+    }
+
+    @Override
+    public Integer updateUser(SaveUserVo saveUserVo) {
+        User user = userMapper.selectByPrimaryKey(saveUserVo.getId());
+        if(user == null){
+            throw new BusinessException(UserEnum.NOTEXIST.getCode(),UserEnum.NOTEXIST.getMsg());
+        }
+
+        BeanUtils.copyProperties(saveUserVo,user);
+        Integer result = userMapper.updateByPrimaryKeySelective(user);
+        return result;
+    }
+
+    @Override
+    public boolean delUserById(Integer id){
+        User user = userMapper.selectByPrimaryKey(id);
+        if(user == null){
+            throw new BusinessException(UserEnum.NOTEXIST.getCode(),UserEnum.NOTEXIST.getMsg());
+        }
+
+        int affectRows = userMapper.deleteByPrimaryKey(id);
+        if(affectRows > 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
