@@ -1,8 +1,11 @@
 package com.my.springboot.springboot1.controller;
 
+import com.my.springboot.springboot1.enums.UserEnum;
 import com.my.springboot.springboot1.exception.BusinessException;
 import com.my.springboot.springboot1.model.User;
 import com.my.springboot.springboot1.service.UserService;
+import com.my.springboot.springboot1.utils.DataResultVOUtil;
+import com.my.springboot.springboot1.vo.DataResultVO;
 import com.my.springboot.springboot1.vo.SaveUserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -20,51 +23,65 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/getUserInfo")
-    public User userDetail(@RequestParam(value = "id") Integer id){
-        return userService.getUserInfo(id);
+    public DataResultVO userDetail(@RequestParam(value = "id") Integer id) {
+//        try {
+//            User user = userService.getUserInfo(id);
+//            return DataResultVOUtil.success(user);
+//        }catch (BusinessException e){
+//            return DataResultVOUtil.error(e.getErrCode(),e.getMessage());
+//        }
+        //全局异常捕获
+        User user = userService.getUserInfo(id);
+        return DataResultVOUtil.success(user);
     }
 
     @PostMapping("/addUser")
-    public Object addUser(@RequestBody @Valid SaveUserVo saveUserVo, BindingResult bindingResult){
+    public DataResultVO addUser(@RequestBody @Valid SaveUserVo saveUserVo, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
-            return bindingResult.getFieldError().getDefaultMessage();
+            return DataResultVOUtil.error(1000,bindingResult.getFieldError().getDefaultMessage());
         }
-        return userService.addUser(saveUserVo);
+        boolean result = userService.addUser(saveUserVo);
+        if (result) {
+            return DataResultVOUtil.success();
+        } else {
+            return DataResultVOUtil.error(UserEnum.ADDFAIL.getCode(),UserEnum.ADDFAIL.getMsg());
+        }
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@RequestBody @Valid SaveUserVo saveUserVo,BindingResult bindingResult){
+    public DataResultVO updateUser(@RequestBody @Valid SaveUserVo saveUserVo,BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
-            return bindingResult.getFieldError().getDefaultMessage();
+            return DataResultVOUtil.error(1000,bindingResult.getFieldError().getDefaultMessage());
         }
 
         try {
-            Integer result = userService.updateUser(saveUserVo);
-            if(result != null && result != 0){
-                return "更新成功";
+            boolean result = userService.updateUser(saveUserVo);
+            if(result){
+                return DataResultVOUtil.success();
             }else{
-                return "更新失败";
+                return DataResultVOUtil.error(UserEnum.UPDATEFAIL.getCode(),UserEnum.UPDATEFAIL.getMsg());
             }
         }catch (BusinessException e){
-            return e.getMessage();
+            return DataResultVOUtil.error(e.getErrCode(),e.getMessage());
         }
     }
 
     @GetMapping("/delUserById")
-    public Map delUserById(@RequestParam(value = "id") Integer id){
+    public DataResultVO delUserById(@RequestParam(value = "id") Integer id){
         Map<String,Object> result = new HashMap<>();
-        if(id == null){
-            result.put("result","用户不存在");
-            return result;
+        if (id == null) {
+            return DataResultVOUtil.error(1000,"参数错误");
         }
 
-        boolean delResult = userService.delUserById(id);
-        if(delResult){
-            result.put("result","用户删除成功");
-            return result;
-        }else {
-            result.put("result","用户删除失败");
-            return result;
+        try {
+            boolean delResult = userService.delUserById(id);
+            if(delResult){
+                return DataResultVOUtil.success();
+            }else{
+                return DataResultVOUtil.error(UserEnum.DELFAIL.getCode(),UserEnum.DELFAIL.getMsg());
+            }
+        }catch (BusinessException e) {
+            return DataResultVOUtil.error(e.getErrCode(),e.getMessage());
         }
     }
 }

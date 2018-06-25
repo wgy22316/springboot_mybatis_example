@@ -20,7 +20,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserInfo(Integer id) {
-        return userMapper.selectByPrimaryKey(id);
+        User user = userMapper.selectByPrimaryKey(id);
+        if (user == null) {
+            throw new BusinessException(UserEnum.NOTEXIST.getCode(),UserEnum.NOTEXIST.getMsg());
+        }
+        return user;
     }
 
     @Override
@@ -34,23 +38,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer addUser(SaveUserVo saveUserVo) {
+    public boolean addUser(SaveUserVo saveUserVo) {
         User user = new User();
         BeanUtils.copyProperties(saveUserVo,user);
-        Integer result = userMapper.insertSelective(user);
-        return user.getId();
+        int result = userMapper.insertSelective(user);
+        if (result > 0) {
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public Integer updateUser(SaveUserVo saveUserVo) {
+    public boolean updateUser(SaveUserVo saveUserVo) {
         User user = userMapper.selectByPrimaryKey(saveUserVo.getId());
-        if(user == null){
+        if (user == null) {
             throw new BusinessException(UserEnum.NOTEXIST.getCode(),UserEnum.NOTEXIST.getMsg());
         }
 
         BeanUtils.copyProperties(saveUserVo,user);
-        Integer result = userMapper.updateByPrimaryKeySelective(user);
-        return result;
+        int affectRows = userMapper.updateByPrimaryKeySelective(user);
+        if (affectRows > 0) {
+            return true;
+        }
+        return false;
     }
 
     @Override

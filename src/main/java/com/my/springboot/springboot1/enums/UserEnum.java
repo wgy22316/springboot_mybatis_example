@@ -4,7 +4,11 @@ import lombok.Data;
 
 public enum  UserEnum {
 
-    NOTEXIST(1000,"用户不存在");
+    NOTEXIST(1000,"用户不存在"),
+    ADDFAIL(1001,"用户添加失败"),
+    UPDATEFAIL(1002,"用户更新失败"),
+    DELFAIL(1003,"用户删除失败")
+    ;
     /**
      * 枚举code
      */

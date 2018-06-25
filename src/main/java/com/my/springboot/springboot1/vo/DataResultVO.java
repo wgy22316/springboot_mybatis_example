@@ -1,9 +1,9 @@
-package com.my.springboot.springboot1.respoonse;
+package com.my.springboot.springboot1.vo;
 
 import lombok.Data;
 
 @Data
-public class DataResult {
+public class DataResultVO {
 
     /**
      * 错误码
@@ -20,8 +20,4 @@ public class DataResult {
      */
     private Object data;
 
-
-    public DataResult success(Object data){
-        return null;
-    }
 }
