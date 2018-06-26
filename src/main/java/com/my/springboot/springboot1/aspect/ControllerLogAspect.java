@@ -1,5 +1,6 @@
 package com.my.springboot.springboot1.aspect;
 
+import com.google.gson.Gson;
 import com.my.springboot.springboot1.exception.BusinessException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -12,6 +13,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Aspect
 @Component
@@ -33,6 +35,7 @@ public class ControllerLogAspect {
         HttpServletRequest request = attributes.getRequest();
         String requestUrl = request.getRequestURL().toString();
         String queryString = request.getQueryString();
+        Map inputParam = request.getParameterMap(); //输入参数
         String requestMethod = request.getMethod();
         String ip = request.getRemoteAddr();
         Integer errCode = 0;
@@ -52,6 +55,9 @@ public class ControllerLogAspect {
         }
 
         long runTime = System.currentTimeMillis() - startTime;
+        Gson gson = new Gson();
+        String inputParamJson = gson.toJson(inputParam);
+        String reponseResult = gson.toJson(result);
 //        System.out.println("className:"+clasName);
 //        System.out.println("methodName:"+methodName);
 //        System.out.println("requestUrl:"+requestUrl);
@@ -61,17 +67,19 @@ public class ControllerLogAspect {
 //        System.out.println("errCode:"+errCode);
 //        System.out.println("msg:"+msg);
 //        System.out.println("runTime:"+runTime);
-
-        if(result != null){
-            System.out.println("result:"+result.toString());
-        }
-        logger.info("request_response,requestUrl:{},queryString:{},requestMethod:{},ip:{},errCode:{},msg:{},runTime:{}",
+//
+//        if(result != null){
+//            System.out.println("result:"+result.toString());
+//        }
+        logger.info("request_response=>requestUrl:{},queryString:{},requestParam:{},requestMethod:{},ip:{},errCode:{},msg:{},response:{},runTime:{}",
                 requestUrl,
                 queryString,
+                inputParamJson,
                 requestMethod,
                 ip,
                 errCode,
                 msg,
+                reponseResult,
                 runTime
                 );
         if (resultExeption != null) {
