@@ -1,6 +1,5 @@
 package com.my.springboot.springboot1.exception;
 
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
