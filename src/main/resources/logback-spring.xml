@@ -26,8 +26,8 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--路径-->
             <fileNamePattern>log/info.%d.log</fileNamePattern>
-            <!--最多保存30天 -->
-            <maxHistory>30</maxHistory>
+            <!--最多保存2天 -->
+            <maxHistory>2</maxHistory>
         </rollingPolicy>
     </appender>
 

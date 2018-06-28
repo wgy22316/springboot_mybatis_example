@@ -1,6 +1,6 @@
 package com.my.springboot.springboot1.aspect;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 import com.my.springboot.springboot1.exception.BusinessException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -35,7 +35,8 @@ public class ControllerLogAspect {
         HttpServletRequest request = attributes.getRequest();
         String requestUrl = request.getRequestURL().toString();
         String queryString = request.getQueryString();
-        Map inputParam = request.getParameterMap(); //输入参数
+        //输入参数
+        Map inputParam = request.getParameterMap();
         String requestMethod = request.getMethod();
         String ip = request.getRemoteAddr();
         Integer errCode = 0;
@@ -55,22 +56,8 @@ public class ControllerLogAspect {
         }
 
         long runTime = System.currentTimeMillis() - startTime;
-        Gson gson = new Gson();
-        String inputParamJson = gson.toJson(inputParam);
-        String reponseResult = gson.toJson(result);
-//        System.out.println("className:"+clasName);
-//        System.out.println("methodName:"+methodName);
-//        System.out.println("requestUrl:"+requestUrl);
-//        System.out.println("queryString:"+queryString);
-//        System.out.println("requestMethod:"+requestMethod);
-//        System.out.println("ip:"+ip);
-//        System.out.println("errCode:"+errCode);
-//        System.out.println("msg:"+msg);
-//        System.out.println("runTime:"+runTime);
-//
-//        if(result != null){
-//            System.out.println("result:"+result.toString());
-//        }
+        String inputParamJson = JSON.toJSONString(inputParam);
+        String reponseResult = JSON.toJSONString(result);
         logger.info("request_response=>requestUrl:{},queryString:{},requestParam:{},requestMethod:{},ip:{},errCode:{},msg:{},response:{},runTime:{}",
                 requestUrl,
                 queryString,
@@ -85,8 +72,6 @@ public class ControllerLogAspect {
         if (resultExeption != null) {
             throw resultExeption;
         }
-
-
 
         return result;
 
