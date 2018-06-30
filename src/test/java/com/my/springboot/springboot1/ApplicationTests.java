@@ -5,12 +5,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ApplicationTests {
 
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
 	@Autowired
 	private Task task;
 
@@ -24,6 +27,14 @@ public class ApplicationTests {
 		task.doTaskTwo();
 		task.doTaskThree();
 		Thread.currentThread().join();
+	}
+
+	@Test
+	public void testRedis(){
+
+		stringRedisTemplate.opsForValue().set("hello","world");
+		System.out.println(stringRedisTemplate.opsForValue().get("hello"));
+
 	}
 
 }
