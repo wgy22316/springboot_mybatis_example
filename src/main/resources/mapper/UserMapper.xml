@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.UserMapper">
+<mapper namespace="com.my.springboot.springboot1.mapper.UserMapper">
   <resultMap id="BaseResultMap" type="com.my.springboot.springboot1.model.User">
     <!--
       WARNING - @mbg.generated
@@ -16,9 +16,25 @@
     <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
   </resultMap>
 
+  <resultMap id="UserDTO" type="com.my.springboot.springboot1.dto.UserDTO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+  </resultMap>
+
   <select id="selectUserById" parameterType="integer" resultMap="BaseResultMap">
     SELECT *
     FROM user
     WHERE id=#{id}
+  </select>
+
+  <select id="selectUserByName" parameterType="string" resultMap="UserDTO">
+    SELECT *
+    FROM user
+    WHERE user_name=#{userName}
   </select>
 </mapper>

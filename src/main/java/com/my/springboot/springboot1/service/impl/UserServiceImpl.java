@@ -79,8 +79,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-//    @Override
-////    public UserDTO selectUserByName(String userName) {
-////        return userMapper.selectUserByName(userName);
-////    }
+    @Override
+    public UserDTO selectUserByName(String userName) {
+        return userMapper.selectUserByName(userName);
+    }
 }
