@@ -8,6 +8,8 @@ import com.my.springboot.springboot1.utils.DataResultVOUtil;
 import com.my.springboot.springboot1.vo.DataResultVO;
 import com.my.springboot.springboot1.vo.SaveUserVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,27 +17,29 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
+    @RequestMapping("/index")
+    public String index(ModelMap modelMap){
+        User user = userService.getUserInfo(1);
+        modelMap.addAttribute("user",user);
+        return "user/index";
+    }
+
     @GetMapping("/getUserInfo")
+    @ResponseBody
     public DataResultVO userDetail(@RequestParam(value = "id") Integer id) {
-//        try {
-//            User user = userService.getUserInfo(id);
-//            return DataResultVOUtil.success(user);
-//        }catch (BusinessException e){
-//            return DataResultVOUtil.error(e.getErrCode(),e.getMessage());
-//        }
-        //全局异常捕获
         User user = userService.getUserInfo(id);
         return DataResultVOUtil.success(user);
     }
 
     @PostMapping("/addUser")
+    @ResponseBody
     public DataResultVO addUser(@RequestBody @Valid SaveUserVo saveUserVo, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return DataResultVOUtil.error(1000,bindingResult.getFieldError().getDefaultMessage());
@@ -49,6 +53,7 @@ public class UserController {
     }
 
     @PostMapping("/updateUser")
+    @ResponseBody
     public DataResultVO updateUser(@RequestBody @Valid SaveUserVo saveUserVo,BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return DataResultVOUtil.error(1000,bindingResult.getFieldError().getDefaultMessage());
@@ -67,6 +72,7 @@ public class UserController {
     }
 
     @GetMapping("/delUserById")
+    @ResponseBody
     public DataResultVO delUserById(@RequestParam(value = "id") Integer id){
         Map<String,Object> result = new HashMap<>();
         if (id == null) {
