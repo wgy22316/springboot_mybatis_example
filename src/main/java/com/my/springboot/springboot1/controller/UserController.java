@@ -24,11 +24,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/index")
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
     public String index(ModelMap modelMap){
-        User user = userService.getUserInfo(1);
-        modelMap.addAttribute("user",user);
-        return "user/index";
+//        User user = userService.getUserInfo(1);
+//        modelMap.addAttribute("user",user);
+        return "user/login";
     }
 
     @GetMapping("/getUserInfo")
