@@ -12,8 +12,6 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan(basePackages = "com.my.springboot.springboot1.mapper")
 ////启用定时任务
 //@EnableScheduling
-
-
 @SpringBootApplication
 public class Application {
 

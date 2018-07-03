@@ -1,5 +1,6 @@
 package com.my.springboot.springboot1.controller;
 
+import com.my.springboot.springboot1.dto.UserDTO;
 import com.my.springboot.springboot1.enums.UserEnum;
 import com.my.springboot.springboot1.exception.BusinessException;
 import com.my.springboot.springboot1.model.User;
@@ -26,10 +27,29 @@ public class UserController {
 
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public String index(ModelMap modelMap){
-//        User user = userService.getUserInfo(1);
-//        modelMap.addAttribute("user",user);
         return "user/login";
     }
+
+//    @PostMapping("/login")
+//    @ResponseBody
+//    public DataResultVO login(String userName, String password){
+//        System.out.println(userName);
+//        System.out.println(password);
+//        if(userName == null || password == null){
+//            return DataResultVOUtil.error(1000,"用户名和密码不能为空");
+//        }
+//
+//        UserDTO userDTO = userService.selectUserByName(userName);
+//        if(userDTO == null){
+//            return DataResultVOUtil.error(1001,"用户不存在");
+//        }
+//
+//        if(!password.equals(userDTO.getPassword())){
+//            return DataResultVOUtil.error(1001,"用户名或者密码错误");
+//        }
+//
+//        return DataResultVOUtil.success();
+//    }
 
     @GetMapping("/getUserInfo")
     @ResponseBody

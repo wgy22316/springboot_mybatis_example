@@ -1,5 +1,6 @@
 package com.my.springboot.springboot1.service.impl;
 
+import com.my.springboot.springboot1.dto.UserDTO;
 import com.my.springboot.springboot1.enums.UserEnum;
 import com.my.springboot.springboot1.exception.BusinessException;
 import com.my.springboot.springboot1.mapper.UserMapper;
@@ -77,4 +78,9 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
+
+//    @Override
+////    public UserDTO selectUserByName(String userName) {
+////        return userMapper.selectUserByName(userName);
+////    }
 }
