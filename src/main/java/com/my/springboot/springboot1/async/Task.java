@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Random;
 
 @Slf4j
-@Component
+//@Component
 public class Task {
     public static Random random = new Random();
 

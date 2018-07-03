@@ -27,9 +27,9 @@
                          targetProject="src/main/resources"/>
 
         <!--生成的mapper(dao)所在的包路径-->
-        <!--<javaClientGenerator targetPackage="com.my.springboot.springboot1.mapper"-->
-                             <!--targetProject="src/main/java"-->
-                             <!--type="XMLMAPPER"/>-->
+        <javaClientGenerator targetPackage="com.my.springboot.springboot1.mapper"
+                             targetProject="src/main/java"
+                             type="XMLMAPPER"/>
 
         <!--生成的表名对应的实体类名字 不指定实体类名字，则根据根据表名自动转换-->
         <table tableName="user" domainObjectName="User"
