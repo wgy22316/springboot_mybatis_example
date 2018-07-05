@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseBody
-    public DataResultVO login(String userName, String password){
+    public DataResultVO login(HttpSession httpSession, String userName, String password){
         System.out.println(userName);
         System.out.println(password);
         if(userName == null || password == null){
@@ -48,7 +49,14 @@ public class UserController {
             return DataResultVOUtil.error(1001,"用户名或者密码错误");
         }
 
+        httpSession.setAttribute("user_name",userName);
         return DataResultVOUtil.success();
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession httpSession){
+        httpSession.removeAttribute("user_name");
+        return "user/login";
     }
 
     @GetMapping("/getUserInfo")
