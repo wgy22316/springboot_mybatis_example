@@ -80,6 +80,19 @@ public class UserController {
         }
     }
 
+    @GetMapping("/edit")
+    public String edit(@RequestParam(value = "id") Integer id, ModelMap modelMap){
+        User user = null;
+        try {
+            user = userService.getUserInfo(id);
+        }catch (BusinessException e){
+
+        }
+
+        modelMap.addAttribute("user",user);
+        return "user/edit";
+    }
+
     @PostMapping("/updateUser")
     @ResponseBody
     public DataResultVO updateUser(@RequestBody @Valid SaveUserVo saveUserVo,BindingResult bindingResult){
