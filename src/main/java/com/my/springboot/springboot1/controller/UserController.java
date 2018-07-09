@@ -95,7 +95,7 @@ public class UserController {
 
     @PostMapping("/updateUser")
     @ResponseBody
-    public DataResultVO updateUser(@RequestBody @Valid SaveUserVo saveUserVo,BindingResult bindingResult){
+    public DataResultVO updateUser(@Valid SaveUserVo saveUserVo,BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return DataResultVOUtil.error(1000,bindingResult.getFieldError().getDefaultMessage());
         }

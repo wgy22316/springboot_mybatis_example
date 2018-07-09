@@ -18,7 +18,6 @@ public class SaveUserVo {
     /**
      * 密码
      */
-    @NotNull(message = "密码不能为空")
     private String password;
 
     /**
