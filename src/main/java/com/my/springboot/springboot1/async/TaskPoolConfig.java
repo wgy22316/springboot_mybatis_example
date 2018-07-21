@@ -10,8 +10,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 //异步任务
-@EnableAsync
-@Configuration
+//@EnableAsync
+//@Configuration
 public class TaskPoolConfig {
 
     @Bean("taskExecutor")
