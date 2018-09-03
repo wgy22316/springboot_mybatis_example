@@ -14,8 +14,15 @@ public class HelloSenderTest {
     @Autowired
     private HelloSender helloSender;
 
+    @Autowired
+    private HelloSender2 helloSender2;
+
     @Test
     public void send() {
-        helloSender.send();
+        for (int i = 0; i < 20; i++){
+            helloSender.send(i);
+            helloSender2.send(i);
+        }
+
     }
 }

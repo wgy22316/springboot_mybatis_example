@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class HelloSender {
+public class HelloSender2 {
 
     @Autowired
     private AmqpTemplate amqpTemplate;
