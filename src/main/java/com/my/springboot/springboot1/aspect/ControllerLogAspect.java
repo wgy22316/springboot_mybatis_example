@@ -1,6 +1,7 @@
 package com.my.springboot.springboot1.aspect;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.my.springboot.springboot1.exception.BusinessException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -55,9 +56,8 @@ public class ControllerLogAspect {
         }
 
         long runTime = System.currentTimeMillis() - startTime;
-        Gson gson = new Gson();
-        String inputParamJson = gson.toJson(inputParam);
-        String reponseResult = gson.toJson(result);
+        String inputParamJson = JSON.toJSONString(inputParam);
+        String reponseResult = JSON.toJSONString(result);
 //        System.out.println("className:"+clasName);
 //        System.out.println("methodName:"+methodName);
 //        System.out.println("requestUrl:"+requestUrl);

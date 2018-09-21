@@ -8,6 +8,7 @@ import com.my.springboot.springboot1.service.UserService;
 import com.my.springboot.springboot1.utils.DataResultVOUtil;
 import com.my.springboot.springboot1.vo.DataResultVO;
 import com.my.springboot.springboot1.vo.SaveUserVo;
+import com.my.springboot.springboot1.vo.request.UserInfoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +26,9 @@ public class UserController {
 
     @CheckSign
     @PostMapping("/getUserInfo")
-    public DataResultVO userDetail(@RequestParam(value = "id") Integer id) {
+    public DataResultVO userDetail(@RequestBody UserInfoRequest userInfoRequest) {
         //全局异常捕获
-        User user = userService.getUserInfo(id);
+        User user = userService.getUserInfo(userInfoRequest.getData().getId());
         return DataResultVOUtil.success(user);
     }
 
