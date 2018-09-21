@@ -1,5 +1,6 @@
 package com.my.springboot.springboot1.controller;
 
+import com.my.springboot.springboot1.annotation.CheckSign;
 import com.my.springboot.springboot1.enums.UserEnum;
 import com.my.springboot.springboot1.exception.BusinessException;
 import com.my.springboot.springboot1.model.User;
@@ -22,14 +23,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/getUserInfo")
+    @CheckSign
+    @PostMapping("/getUserInfo")
     public DataResultVO userDetail(@RequestParam(value = "id") Integer id) {
-//        try {
-//            User user = userService.getUserInfo(id);
-//            return DataResultVOUtil.success(user);
-//        }catch (BusinessException e){
-//            return DataResultVOUtil.error(e.getErrCode(),e.getMessage());
-//        }
         //全局异常捕获
         User user = userService.getUserInfo(id);
         return DataResultVOUtil.success(user);
