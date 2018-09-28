@@ -9,5 +9,5 @@ import org.springframework.stereotype.Component;
 @Data
 public class RunEnvironmentConfig {
 
-    public String active;
+    private String active;
 }

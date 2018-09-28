@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.my.springboot.springboot1.annotation.CheckSign;
 import com.my.springboot.springboot1.config.RunEnvironmentConfig;
 import com.my.springboot.springboot1.exception.BusinessException;
-import com.my.springboot.springboot1.utils.EncryptUtil;
 import com.my.springboot.springboot1.utils.RequestSignUtil;
 import com.my.springboot.springboot1.utils.RequestUtil;
 import org.slf4j.Logger;
@@ -14,19 +13,19 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 import static com.my.springboot.springboot1.utils.RequestUtil.checkAppId;
 
 @Component
 public class CheckSignInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(CheckSignInterceptor.class);
+
+    @Resource
+    private RunEnvironmentConfig runEnvironmentConfig;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws
@@ -40,10 +39,11 @@ public class CheckSignInterceptor extends HandlerInterceptorAdapter {
         Method method = handlerMethod.getMethod();
 
         CheckSign checkSignAnnotation = method.getAnnotation(CheckSign.class);
-        RunEnvironmentConfig runEnvironmentConfig = new RunEnvironmentConfig();
-        System.out.println(runEnvironmentConfig.getActive());
+
+        String environment = runEnvironmentConfig.getActive();
+
         //有@CheckSign 注解，需要认证
-        if (checkSignAnnotation != null) {
+        if (checkSignAnnotation != null && !"dev".equals(environment)) {
             //参与必须的签名参数是否为空
             JSONObject requestJsonObject = RequestUtil.getJSONParam(request);
 

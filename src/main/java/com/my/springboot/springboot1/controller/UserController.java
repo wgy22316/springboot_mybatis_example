@@ -1,4 +1,5 @@
 package com.my.springboot.springboot1.controller;
+import java.util.Date;
 
 import com.my.springboot.springboot1.annotation.CheckSign;
 import com.my.springboot.springboot1.enums.UserEnum;
@@ -69,6 +70,18 @@ public class UserController {
         if (id == null) {
             return DataResultVOUtil.error(1000,"参数错误");
         }
+
+        User user = new User();
+        user.setId(0);
+        user.setUserName("");
+        user.setPassword("");
+        user.setSex((byte)0);
+        user.setEmail("");
+        user.setAddress("");
+        user.setMobile("");
+        user.setCreateAt(new Date());
+        user.setUpdateAt(new Date());
+
 
         try {
             boolean delResult = userService.delUserById(id);

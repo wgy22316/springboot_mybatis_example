@@ -3,6 +3,7 @@ package com.my.springboot.springboot1.aspect;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.my.springboot.springboot1.exception.BusinessException;
+import com.my.springboot.springboot1.utils.RequestUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,13 +15,12 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 @Aspect
 @Component
 public class ControllerLogAspect {
 
-    private static final Logger logger =  LoggerFactory.getLogger(ControllerLogAspect.class);
+    private static final Logger logger = LoggerFactory.getLogger(ControllerLogAspect.class);
 
     @Pointcut("execution(public * com.my.springboot.springboot1.controller..*.*(..))")
     public void apiLog() {
@@ -28,15 +28,16 @@ public class ControllerLogAspect {
     }
 
     @Around("apiLog()")
-    public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
+    public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         String clasName = proceedingJoinPoint.getTarget().getClass().getName();
         String methodName = proceedingJoinPoint.getSignature().getName();
         Object result = null;
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         String requestUrl = request.getRequestURL().toString();
-        String queryString = request.getQueryString();
-        Map inputParam = request.getParameterMap(); //输入参数
+
+        JSONObject requestJsonParams = RequestUtil.getJSONParam(request);
+
         String requestMethod = request.getMethod();
         String ip = request.getRemoteAddr();
         Integer errCode = 0;
@@ -45,7 +46,7 @@ public class ControllerLogAspect {
         long startTime = System.currentTimeMillis();
         try {
             result = proceedingJoinPoint.proceed();
-        }catch (Exception e){
+        } catch (Exception e) {
             if (e instanceof BusinessException) {
                 errCode = ((BusinessException) e).getErrCode();
                 msg = e.getMessage();
@@ -56,37 +57,24 @@ public class ControllerLogAspect {
         }
 
         long runTime = System.currentTimeMillis() - startTime;
-        String inputParamJson = JSON.toJSONString(inputParam);
+        String requestParamJson = JSON.toJSONString(requestJsonParams);
+
         String reponseResult = JSON.toJSONString(result);
-//        System.out.println("className:"+clasName);
-//        System.out.println("methodName:"+methodName);
-//        System.out.println("requestUrl:"+requestUrl);
-//        System.out.println("queryString:"+queryString);
-//        System.out.println("requestMethod:"+requestMethod);
-//        System.out.println("ip:"+ip);
-//        System.out.println("errCode:"+errCode);
-//        System.out.println("msg:"+msg);
-//        System.out.println("runTime:"+runTime);
-//
-//        if(result != null){
-//            System.out.println("result:"+result.toString());
-//        }
-        logger.info("request_response=>requestUrl:{},queryString:{},requestParam:{},requestMethod:{},ip:{},errCode:{},msg:{},response:{},runTime:{}",
+        logger.info("request_response=>requestUrl:{}, " +
+                        "requestParamJson:{}, requestMethod:{},ip:{}," +
+                        "errCode:{},msg:{},response:{},runTime:{}",
                 requestUrl,
-                queryString,
-                inputParamJson,
+                requestParamJson,
                 requestMethod,
                 ip,
                 errCode,
                 msg,
                 reponseResult,
                 runTime
-                );
+        );
         if (resultExeption != null) {
             throw resultExeption;
         }
-
-
 
         return result;
 

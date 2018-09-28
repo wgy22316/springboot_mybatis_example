@@ -5,6 +5,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,23 +14,74 @@ import java.util.Map;
 public class RequestUtil {
 
     public static JSONObject getJSONParam(HttpServletRequest request) {
+        StringBuilder sb = new StringBuilder();
+        InputStream inputStream = null;
         JSONObject jsonParam = null;
+        BufferedReader bufferedReader = null;
         try {
+            inputStream = request.getInputStream();
             // 获取输入流
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(request.getInputStream(),
-                    "UTF-8"));
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
 
-            // 写入数据到Stringbuilder
-            StringBuilder sb = new StringBuilder();
-            String line = null;
+            String line = "";
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
             jsonParam = JSONObject.parseObject(sb.toString());
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
         return jsonParam;
+    }
+
+    public static String getBodyString(HttpServletRequest request) {
+        StringBuilder sb = new StringBuilder();
+        InputStream inputStream = null;
+        BufferedReader bufferedReader = null;
+        try {
+            inputStream = request.getInputStream();
+            // 获取输入流
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return sb.toString();
     }
 
     /**
